@@ -1,0 +1,40 @@
+import csv
+from numpy import *
+import operator
+
+def toInt(array):
+    array = mat(array)
+    m, n = shape(array)
+    newArray = zeros((m, n))
+    for i in range(m):
+        for j in range(n):
+            newArray[i, j] = int(array[i, j])
+    return newArray
+
+def loadResult():
+    l = []
+    i = 1
+    with open('result.csv') as file:
+        lines = csv.reader(file)
+        for line in lines:
+            l.append(line)
+            i += 1
+    labels = array(l)
+    return toInt(labels[:, 0]), i
+
+def saveDataToSubmit(dataSet, num):
+    a = arange(1, num).reshape((28000, 1))
+    result = hstack((a, dataSet.reshape((28000,1))))
+    l = []
+    for lines in result:
+        l.append(map(int,lines))
+    toInt(l)
+    with open('results.csv', 'wb') as myFile:
+        myWriter = csv.writer(myFile)
+        for i in l:
+            temp = []
+            temp.append(i)
+            myWriter.writerows(temp)
+
+dataSet, num = loadResult()
+saveDataToSubmit(dataSet, num)
